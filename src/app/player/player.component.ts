@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SongsService } from '../songs.service';
 
 @Component({
   selector: 'app-player',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PlayerComponent implements OnInit {
 
-  constructor() { }
+  constructor(private songsService: SongsService) { }
 
   ngOnInit(): void {
+    this.songsService.getAllSongs();
   }
 
 }
