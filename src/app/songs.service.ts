@@ -26,7 +26,7 @@ export type SongObj = {
 export class SongsService {
 
   // https://acnhapi.com/doc
-  baseUrl: string = 'http://acnhapi.com/v1';
+  baseUrl: string = 'https://acnhapi.com/v1';
 
   constructor(private http: HttpClient) { }
 

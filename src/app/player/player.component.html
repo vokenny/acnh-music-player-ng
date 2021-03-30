@@ -4,17 +4,26 @@
     <mat-card-title>Animal Crossing: New Horizons</mat-card-title>
     <mat-card-subtitle>K.K. Slider music player</mat-card-subtitle>
   </mat-card-header>
+
+  <mat-form-field id="song-selector" appearance="fill">
+    <mat-label>Song selection</mat-label>
+    <mat-select disableOptionCentering>
+      <mat-option *ngFor="let song of songs" [value]="song.name">
+        {{ song.id + ". " + song.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
   <img
     mat-card-image
-    src="../../assets/acnh-leaf.png"
-    alt="Animal Crossing Leaf icon"
+    src="{{ currentSong.image_uri }}"
+    alt="{{ currentSong.name }} album cover"
   />
+
   <mat-card-content>
-    <p>
-      Song information will go here. K.K. Slider album cover will go above.
-      Player controls will go below.
-    </p>
+    <p>{{ currentSong.name }}</p>
   </mat-card-content>
+
   <mat-card-actions class="player-controls">
     <button mat-button>PREV</button>
     <button mat-button>PLAY</button>

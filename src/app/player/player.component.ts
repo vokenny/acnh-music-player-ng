@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { SongsService } from '../songs.service';
+import { PlayerStateService } from '../player-state.service';
+import { SongObj, SongsService } from '../songs.service';
 
 @Component({
   selector: 'app-player',
@@ -8,10 +9,13 @@ import { SongsService } from '../songs.service';
 })
 export class PlayerComponent implements OnInit {
 
-  constructor(private songsService: SongsService) { }
+  constructor(private player: PlayerStateService) { }
 
   ngOnInit(): void {
-    this.songsService.getAllSongs();
+    this.player.init();
   }
 
+  songs: SongObj[] = this.player.songs;
+
+  currentSong: SongObj = this.player.currentSong;
 }
