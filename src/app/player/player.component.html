@@ -1,14 +1,14 @@
 <mat-card class="card-container">
   <mat-card-header>
     <div mat-card-avatar id="header-image"></div>
-    <mat-card-title>Animal Crossing: New Horizons</mat-card-title>
+    <mat-card-title>Animal Crossing:<br />New Horizons</mat-card-title>
     <mat-card-subtitle>K.K. Slider music player</mat-card-subtitle>
   </mat-card-header>
 
   <mat-form-field id="song-selector" appearance="fill">
     <mat-label>Song selection</mat-label>
-    <mat-select disableOptionCentering>
-      <mat-option *ngFor="let song of songs" [value]="song.name">
+    <mat-select disableOptionCentering [(value)]="currentSong">
+      <mat-option *ngFor="let song of songObjs" [value]="song">
         {{ song.id + ". " + song.name }}
       </mat-option>
     </mat-select>
@@ -21,12 +21,13 @@
   />
 
   <mat-card-content>
-    <p>{{ currentSong.name }}</p>
+    <p id="song-name">{{ currentSong.name }}</p>
   </mat-card-content>
 
-  <mat-card-actions class="player-controls">
-    <button mat-button>PREV</button>
-    <button mat-button>PLAY</button>
-    <button mat-button>NEXT</button>
+  <mat-card-actions>
+    <audio id="player-controls" controls src="{{ currentSong.music_uri }}">
+      Your browser does not support the
+      <code>audio</code> element.
+    </audio>
   </mat-card-actions>
 </mat-card>
