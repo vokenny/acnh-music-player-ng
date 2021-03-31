@@ -1,4 +1,4 @@
-<mat-card class="card-container">
+<mat-card class="card-container frost">
   <mat-card-header>
     <div mat-card-avatar id="header-image"></div>
     <mat-card-title>Animal Crossing:<br />New Horizons</mat-card-title>
@@ -14,17 +14,20 @@
     </mat-select>
   </mat-form-field>
 
-  <img
-    mat-card-image
-    src="{{ currentSong.image_uri }}"
-    alt="{{ currentSong.name }} album cover"
-  />
+  <div class="img-container">
+    <img
+      id="album-cover"
+      mat-card-image
+      src="{{ currentSong.image_uri }}"
+      alt="{{ currentSong.name }} album cover"
+    />
+  </div>
 
   <mat-card-content>
     <p id="song-name">{{ currentSong.name }}</p>
   </mat-card-content>
 
-  <mat-card-actions>
+  <mat-card-actions id="player-container">
     <audio id="player-controls" controls src="{{ currentSong.music_uri }}">
       Your browser does not support the
       <code>audio</code> element.
