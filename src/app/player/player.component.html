@@ -1,4 +1,4 @@
-<mat-card class="card-container frost">
+<mat-card class="card-container glass">
   <mat-card-header>
     <div mat-card-avatar id="header-image"></div>
     <mat-card-title>Animal Crossing:<br />New Horizons</mat-card-title>
@@ -28,9 +28,17 @@
   </mat-card-content>
 
   <mat-card-actions id="player-container">
-    <audio id="player-controls" controls src="{{ currentSong.music_uri }}">
+    <audio
+      id="player-controls"
+      controls
+      loop="true"
+      src="{{ currentSong.music_uri }}"
+      type="audio/mpeg"
+    >
       Your browser does not support the
-      <code>audio</code> element.
+      <code>audio</code> element. Here is a
+      <a href="{{ currentSong.music_uri }}">link to download the audio</a>
+      instead.
     </audio>
   </mat-card-actions>
 </mat-card>

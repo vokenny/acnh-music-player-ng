@@ -1,18 +1,18 @@
-.frost {
+.glass {
   background: rgba(255, 255, 255, 0.7);
   box-shadow: 0 8px 32px 0 rgba(0, 60, 3, 0.5);
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  border: 1px solid rgba(160, 160, 160, 0.18);
+  backdrop-filter: blur(2px);
 }
 
 .card-container {
-  border: 1px solid rgba(0, 60, 3, 0.8);
   max-width: 288px;
   overflow: hidden;
 }
 
 #header-image {
-  border-radius: 5px;
+  border-radius: 4px;
   background-image: url("../../assets/images/acnh-leaf.png");
   background-size: cover;
 }
@@ -28,7 +28,7 @@
 }
 
 #album-cover {
-  max-width: 280px;
+  max-width: 288px;
   height: auto;
   margin: 0;
   padding: 0;
