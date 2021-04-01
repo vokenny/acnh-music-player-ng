@@ -1,4 +1,10 @@
-# AcnhMusicPlayerNg
+# acnh-music-player-ng
+
+https://vokenny.github.io/acnh-music-player-ng/
+
+Animal Crossing: New Horizons music player. Plays all 95 K.K. Slider songs, sourced from [ACNH API](https://acnhapi.com/).
+
+All images and music assets are the sole property of Nintendo.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.5.
 
