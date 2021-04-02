@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { SongInterface, SongObj, SongsService } from '../songs.service';
+import { SongsService } from '../../services/songs/songs.service';
+import { SongInterface } from '../../interfaces/SongInterface';
+import { SongObj } from '../../models/SongObj';
 
 @Component({
   selector: 'app-player',
