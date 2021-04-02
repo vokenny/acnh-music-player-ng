@@ -20,13 +20,13 @@ export class PlayerComponent implements OnInit {
     image_uri: 'https://acnhapi.com/v1/images/songs/95'
   };
 
-  constructor(private songService: SongsService) { }
+  constructor(private songsService: SongsService) { }
 
   ngOnInit(): void {
     this.getAllSongs();
   }
 
-  private getAllSongs = () => this.songService.getAllSongs().subscribe({
+  private getAllSongs = () => this.songsService.getAllSongs().subscribe({
     error: (_) => console.log('Error fetching all song information', _),
     next: (data: Object) => this.extractSongs(data)
   });
