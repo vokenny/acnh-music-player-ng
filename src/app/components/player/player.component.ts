@@ -17,7 +17,6 @@ export class PlayerComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllSongs();
-    this.audio.setSong(this.currentSong);
   }
 
   songObjs: SongObj[] = [];
@@ -32,7 +31,11 @@ export class PlayerComponent implements OnInit {
 
   private getAllSongs = (): Subscription => this.songsService.getAllSongs().subscribe({
     error: (_) => console.log('Error fetching all song information', _),
-    next: (data: Object) => this.extractSongs(data)
+    next: (data: Object) => {
+      this.extractSongs(data);
+      this.setDefaultSong();
+      this.audio.setSong(this.currentSong);
+    }
   });
   
   private extractSongs = (songs: Object): void => {
@@ -50,11 +53,20 @@ export class PlayerComponent implements OnInit {
         music_uri: songI.music_uri,
         image_uri: songI.image_uri
       }
-    })    
+    })
+  }
+
+  private setDefaultSong = (): void => {
+    const welcomeHorizonsSong: SongObj | undefined = this.songObjs.find(song => song.name === 'Welcome Horizons');
+
+    welcomeHorizonsSong ? this.currentSong = welcomeHorizonsSong : null;
   }
 
   private numOfAllSongs = () => this.songObjs.length;
 
+  /*
+   * Play/Pause/Next/Prev control logic
+   */
   getAudioState = (): AudioState => this.audio.audioState;
 
   play = (): void => {
@@ -97,6 +109,9 @@ export class PlayerComponent implements OnInit {
     return this.songObjs[idxOfNextSong];
   }
 
+  /*
+   * Song shuffle logic
+   */
   private shuffle = (arr: SongObj[]): void => {
     // Fisher-Yates shuffle
     for (let i = arr.length - 1; i > 0; i--) {
@@ -114,4 +129,17 @@ export class PlayerComponent implements OnInit {
   }
 
   private sort = (arr: SongObj[]): SongObj[] => arr.sort((s1, s2) => s1.id - s2.id);
+
+  /*
+   * Volume Slider control logic
+   */
+  volume: number | null = 100;
+  showVolSlider = false;
+
+  setVolume = (event: any) => {
+    this.volume = event.value;
+    this.audio.setVolume(event.value);
+  } 
+
+  toggleVolSlider = () => this.showVolSlider = !this.showVolSlider;
 }

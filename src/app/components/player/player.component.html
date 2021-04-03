@@ -1,4 +1,4 @@
-<mat-card class="card-container glass">
+<mat-card class="card glass">
   <mat-card-header>
     <div mat-card-avatar id="header-image"></div>
     <mat-card-title>Animal Crossing:<br />New Horizons</mat-card-title>
@@ -27,11 +27,14 @@
     />
   </div>
 
-  <mat-card-content>
-    <p id="song-name">{{ currentSong.name }}</p>
-  </mat-card-content>
-
   <mat-card-actions id="player-container">
+    <mat-icon
+      id="shuffle-icon"
+      (click)="toggleShuffle()"
+      [ngClass]="!getAudioState().shuffleMode ? 'faded' : ''"
+      >shuffle</mat-icon
+    >
+
     <mat-icon (click)="prevSong()">skip_previous</mat-icon>
 
     <!-- Play/Pause button -->
@@ -44,11 +47,17 @@
 
     <mat-icon (click)="nextSong()">skip_next</mat-icon>
 
-    <mat-icon
-      id="shuffle-icon"
-      (click)="toggleShuffle()"
-      [ngClass]="!getAudioState().shuffleMode ? 'faded' : ''"
-      >shuffle</mat-icon
-    >
+    <mat-slider
+      id="volume-slider"
+      *ngIf="showVolSlider"
+      thumbLabel
+      vertical
+      min="0"
+      max="100"
+      (input)="setVolume($event)"
+      [value]="volume"
+    ></mat-slider>
+
+    <mat-icon class="volume" (click)="toggleVolSlider()">volume_up</mat-icon>
   </mat-card-actions>
 </mat-card>

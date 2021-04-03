@@ -21,9 +21,13 @@ export class AudioService {
     this.audioState.isPlaying ? this.audioObj.play() : null;
   }
 
-  play = () => this.audioObj.play();
+  play = (): Promise<void> => this.audioObj.play();
 
-  pause = () => this.audioObj.pause();
+  pause = (): void => this.audioObj.pause();
 
-  toggleShuffle = () => this.audioState.shuffleMode = !this.audioState.shuffleMode;
+  toggleShuffle = (): boolean => this.audioState.shuffleMode = !this.audioState.shuffleMode;
+
+  setVolume = (vol: any): void => {
+    typeof vol === 'number' && vol >= 0 && vol <= 100 ? this.audioObj.volume = vol / 100 : null;
+  }
 }

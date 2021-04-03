@@ -3,10 +3,9 @@
   box-shadow: 0 8px 32px 0 rgba(0, 60, 3, 0.5);
   border-radius: 8px;
   border: 1px solid rgba(160, 160, 160, 0.18);
-  backdrop-filter: blur(2px);
 }
 
-.card-container {
+.card {
   max-width: 288px;
   overflow: hidden;
 }
@@ -61,5 +60,19 @@
 #shuffle-icon {
   position: absolute;
   left: 16px;
+  bottom: 16px;
+}
+
+#volume-slider {
+  border-radius: 10px;
+  background-color: rgba(150, 150, 150, 0.8);
+  position: absolute;
+  right: 5px;
+  bottom: 40px;
+}
+
+.volume {
+  position: absolute;
+  right: 16px;
   bottom: 16px;
 }
