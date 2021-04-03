@@ -50,6 +50,16 @@
   margin: 0;
 }
 
-#player-controls {
-  border-radius: 4px;
+.mat-icon:hover {
+  cursor: pointer;
+}
+
+.faded {
+  color: rgb(150, 150, 150);
+}
+
+#shuffle-icon {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
 }

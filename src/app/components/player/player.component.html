@@ -6,7 +6,7 @@
   </mat-card-header>
 
   <mat-form-field id="song-selector" appearance="fill">
-    <mat-label>Song selection</mat-label>
+    <mat-label>Playlist</mat-label>
     <mat-select disableOptionCentering [(value)]="currentSong">
       <mat-option
         *ngFor="let song of songObjs"
@@ -43,5 +43,12 @@
     >
 
     <mat-icon (click)="nextSong()">skip_next</mat-icon>
+
+    <mat-icon
+      id="shuffle-icon"
+      (click)="toggleShuffle()"
+      [ngClass]="!getAudioState().shuffleMode ? 'faded' : ''"
+      >shuffle</mat-icon
+    >
   </mat-card-actions>
 </mat-card>

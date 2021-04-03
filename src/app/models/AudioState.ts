@@ -1,3 +1,6 @@
+import { SongObj } from "./SongObj";
+
 export type AudioState = {
-  isPlaying: boolean
+  isPlaying: boolean,
+  shuffleMode: boolean
 }

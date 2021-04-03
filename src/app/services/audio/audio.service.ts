@@ -12,7 +12,8 @@ export class AudioService {
   audioObj: HTMLAudioElement = new Audio();
 
   audioState: AudioState = {
-    isPlaying: false
+    isPlaying: false,
+    shuffleMode: false
   }
 
   setSong = (newSong: SongObj) => {
@@ -23,4 +24,6 @@ export class AudioService {
   play = () => this.audioObj.play();
 
   pause = () => this.audioObj.pause();
+
+  toggleShuffle = () => this.audioState.shuffleMode = !this.audioState.shuffleMode;
 }

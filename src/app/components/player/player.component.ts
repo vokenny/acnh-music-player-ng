@@ -96,4 +96,22 @@ export class PlayerComponent implements OnInit {
 
     return this.songObjs[idxOfNextSong];
   }
+
+  private shuffle = (arr: SongObj[]): void => {
+    // Fisher-Yates shuffle
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  }
+
+  toggleShuffle = (): void => {
+    // Change shuffle mode first
+    this.audio.toggleShuffle();
+
+    // Randomise or reorder based on new shuffle mode
+    this.getAudioState().shuffleMode ? this.shuffle(this.songObjs) : this.sort(this.songObjs);
+  }
+
+  private sort = (arr: SongObj[]): SongObj[] => arr.sort((s1, s2) => s1.id - s2.id);
 }
