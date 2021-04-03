@@ -8,7 +8,11 @@
   <mat-form-field id="song-selector" appearance="fill">
     <mat-label>Song selection</mat-label>
     <mat-select disableOptionCentering [(value)]="currentSong">
-      <mat-option *ngFor="let song of songObjs" [value]="song">
+      <mat-option
+        *ngFor="let song of songObjs"
+        [value]="song"
+        (click)="selectSong(currentSong)"
+      >
         {{ song.id + ". " + song.name }}
       </mat-option>
     </mat-select>
@@ -28,17 +32,16 @@
   </mat-card-content>
 
   <mat-card-actions id="player-container">
-    <audio
-      id="player-controls"
-      controls
-      loop="true"
-      src="{{ currentSong.music_uri }}"
-      type="audio/mpeg"
+    <mat-icon (click)="prevSong()">skip_previous</mat-icon>
+
+    <!-- Play/Pause button -->
+    <mat-icon *ngIf="!getAudioState().isPlaying" (click)="play()"
+      >play_circle_outline</mat-icon
     >
-      Your browser does not support the
-      <code>audio</code> element. Here is a
-      <a href="{{ currentSong.music_uri }}">link to download the audio</a>
-      instead.
-    </audio>
+    <mat-icon *ngIf="getAudioState().isPlaying" (click)="pause()"
+      >pause_circle_outline</mat-icon
+    >
+
+    <mat-icon (click)="nextSong()">skip_next</mat-icon>
   </mat-card-actions>
 </mat-card>

@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { SongsService } from '../../services/songs/songs.service';
 import { SongInterface } from '../../interfaces/SongInterface';
 import { SongObj } from '../../models/SongObj';
+import { AudioService } from '../../services/audio/audio.service';
+import { AudioState } from '../../models/AudioState';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-player',
@@ -9,6 +12,13 @@ import { SongObj } from '../../models/SongObj';
   styleUrls: ['./player.component.scss']
 })
 export class PlayerComponent implements OnInit {
+
+  constructor(private songsService: SongsService, private audio: AudioService) { }
+
+  ngOnInit(): void {
+    this.getAllSongs();
+    this.audio.setSong(this.currentSong);
+  }
 
   songObjs: SongObj[] = [];
 
@@ -20,13 +30,7 @@ export class PlayerComponent implements OnInit {
     image_uri: 'https://acnhapi.com/v1/images/songs/95'
   };
 
-  constructor(private songsService: SongsService) { }
-
-  ngOnInit(): void {
-    this.getAllSongs();
-  }
-
-  private getAllSongs = () => this.songsService.getAllSongs().subscribe({
+  private getAllSongs = (): Subscription => this.songsService.getAllSongs().subscribe({
     error: (_) => console.log('Error fetching all song information', _),
     next: (data: Object) => this.extractSongs(data)
   });
@@ -35,7 +39,7 @@ export class PlayerComponent implements OnInit {
     this.songObjs = Object.entries(songs).map(song => {
       const [_, songMetaData] = song;
 
-      // SongInterface lets us select keys on the object
+      // SongInterface lets us select keys on the object.
       // Return type of SongObj instead of SongInterface means
       // we only need to save the information we specify, and not the whole object
       const songI: SongInterface = songMetaData as SongInterface;
@@ -47,5 +51,49 @@ export class PlayerComponent implements OnInit {
         image_uri: songI.image_uri
       }
     })    
+  }
+
+  private numOfAllSongs = () => this.songObjs.length;
+
+  getAudioState = (): AudioState => this.audio.audioState;
+
+  play = (): void => {
+    this.audio.play();
+    this.audio.audioState.isPlaying = true;
+  }
+
+  pause = (): void => {
+    this.audio.pause();
+    this.audio.audioState.isPlaying = false;
+  }
+
+  selectSong = (newSong: SongObj): void => this.audio.setSong(newSong);
+
+  prevSong = (): void => {
+    const prevSong: SongObj = this.getPrevSong();
+
+    this.currentSong = prevSong;
+    this.audio.setSong(prevSong);
+  }
+
+  nextSong = (): void => {
+    const nextSong: SongObj = this.getNextSong();
+
+    this.currentSong = nextSong;
+    this.audio.setSong(nextSong);
+  }
+
+  private getPrevSong = (): SongObj => {
+    const idxOfCurrSong: number = this.songObjs.findIndex(song => song.name === this.currentSong.name);
+    const idxOfPrevSong: number = idxOfCurrSong === 0 ? this.numOfAllSongs() - 1 : idxOfCurrSong - 1;
+    
+    return this.songObjs[idxOfPrevSong];
+  }
+
+  private getNextSong = (): SongObj => {
+    const idxOfCurrSong: number = this.songObjs.indexOf(this.currentSong);
+    const idxOfNextSong: number = idxOfCurrSong === this.numOfAllSongs() - 1 ? 0 : idxOfCurrSong + 1;
+
+    return this.songObjs[idxOfNextSong];
   }
 }
