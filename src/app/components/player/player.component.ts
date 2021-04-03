@@ -71,11 +71,13 @@ export class PlayerComponent implements OnInit {
 
   play = (): void => {
     this.audio.play();
+    this.stopUpdatingSongTime = setInterval(this.updateSongTime, 1000);
     this.audio.audioState.isPlaying = true;
   }
 
   pause = (): void => {
     this.audio.pause();
+    clearInterval(this.stopUpdatingSongTime);
     this.audio.audioState.isPlaying = false;
   }
 
@@ -85,6 +87,7 @@ export class PlayerComponent implements OnInit {
     const prevSong: SongObj = this.getPrevSong();
 
     this.currentSong = prevSong;
+    this.songTime = 0;
     this.audio.setSong(prevSong);
   }
 
@@ -92,6 +95,7 @@ export class PlayerComponent implements OnInit {
     const nextSong: SongObj = this.getNextSong();
 
     this.currentSong = nextSong;
+    this.songTime = 0;
     this.audio.setSong(nextSong);
   }
 
@@ -142,4 +146,19 @@ export class PlayerComponent implements OnInit {
   } 
 
   toggleVolSlider = () => this.showVolSlider = !this.showVolSlider;
+
+  /*
+   * Song playback control logic
+   */
+  playbackLabel = (value: number) => Math.round(value);
+
+  songTime: number = 0;
+
+  getSongDuration = (): number => this.audio.getDuration() ? this.audio.getDuration() : 0;
+
+  setSongTime = (event: any) => this.audio.setCurrentTime(event.value);
+
+  stopUpdatingSongTime: any = null; 
+
+  updateSongTime = (): number => this.songTime = this.audio.getCurrentTime();
 }

@@ -38,13 +38,14 @@
 .mat-card-actions {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
-#song-name {
-  font-size: 20px;
+#playback-slider {
+  width: 70%;
 }
 
-#player-container {
+mat-card > .player-controls {
   padding: 0;
   margin: 0;
 }

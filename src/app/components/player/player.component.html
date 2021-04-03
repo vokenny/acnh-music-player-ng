@@ -27,7 +27,19 @@
     />
   </div>
 
-  <mat-card-actions id="player-container">
+  <mat-card-actions class="player-controls">
+    <mat-slider
+      id="playback-slider"
+      thumbLabel
+      [displayWith]="playbackLabel"
+      min="0"
+      max="{{ getSongDuration() }}"
+      (input)="setSongTime($event)"
+      [value]="songTime"
+    ></mat-slider>
+  </mat-card-actions>
+
+  <mat-card-actions class="player-controls">
     <mat-icon
       id="shuffle-icon"
       (click)="toggleShuffle()"

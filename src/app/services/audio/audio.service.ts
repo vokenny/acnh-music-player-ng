@@ -30,4 +30,12 @@ export class AudioService {
   setVolume = (vol: any): void => {
     typeof vol === 'number' && vol >= 0 && vol <= 100 ? this.audioObj.volume = vol / 100 : null;
   }
+
+  getDuration = (): number => this.audioObj.duration;
+
+  getCurrentTime = (): number => this.audioObj.currentTime;
+
+  setCurrentTime = (time: any): void => {
+    typeof time === 'number' && time >= 0 ? this.audioObj.currentTime = time : null;
+  }
 }
