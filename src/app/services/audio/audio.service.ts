@@ -13,17 +13,36 @@ export class AudioService {
 
   audioState: AudioState = {
     isPlaying: false,
-    shuffleMode: false
+    shuffleMode: false,
+    ended: false
+  }
+
+  private stopPollingEndState: any = null;
+
+  private pollEndState = () => {
+    this.audioObj.ended ? this.audioState.ended = true : null;    
   }
 
   setSong = (newSong: SongObj) => {
     this.audioObj.src = newSong.music_uri;
-    this.audioState.isPlaying ? this.audioObj.play() : null;
+    this.audioState.isPlaying ? this.play() : null;
+    this.audioState.ended = false;
   }
 
-  play = (): Promise<void> => this.audioObj.play();
+  play = (): void => {
+    this.audioObj.play();
 
-  pause = (): void => this.audioObj.pause();
+    // Only create a poll for end state if there isn't one already
+    this.stopPollingEndState === null ? this.stopPollingEndState = setInterval(this.pollEndState, 2000) : null;
+  }
+
+  pause = (): void => {
+    this.audioObj.pause();
+
+    // Stop polling for end state to update this.audioState.ended
+    clearInterval(this.stopPollingEndState);
+    this.stopPollingEndState = null;
+  }
 
   toggleShuffle = (): boolean => this.audioState.shuffleMode = !this.audioState.shuffleMode;
 

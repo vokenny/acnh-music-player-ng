@@ -70,17 +70,29 @@ export class PlayerComponent implements OnInit {
    */
   getAudioState = (): AudioState => this.audio.audioState;
 
+  private stopPollingEndState: any = null;
+
+  private pollEndState = (): void  => {    
+    this.getAudioState().ended ? this.nextSong() : null;    
+  }
+
   play = (): void => {
     this.audio.play();
-    this.stopUpdatingSongTime = setInterval(this.updateSongTime, 1000);
+    this.stopUpdatingSongTime = setInterval(this.updateSongTime, 200);
     this.stopUpdatingSongDuration = setInterval(this.updateSongDuration, 100);
     this.audio.audioState.isPlaying = true;
+
+    // Only create a poll for end state if there isn't one already
+    this.stopPollingEndState === null ? this.stopPollingEndState = setInterval(this.pollEndState, 200) : null;
   }
 
   pause = (): void => {
     this.audio.pause();
-    clearInterval(this.stopUpdatingSongTime);
     this.audio.audioState.isPlaying = false;
+
+    // Stop polling for end state to change to next song
+    clearInterval(this.stopPollingEndState);
+    this.stopPollingEndState = null;    
   }
 
   selectSong = (newSong: SongObj): void => {
@@ -162,28 +174,35 @@ export class PlayerComponent implements OnInit {
   songDuration: number = 0;
   songDurationLabel: string = '0:00';
 
-  private resetSongInfo = () => {
+  private resetSongInfo = (): void => {
     this.songTime = 0;
     this.songTimeLabel = '0:00';
-    this.stopUpdatingSongDuration = setInterval(this.updateSongDuration, 500);
+    this.stopUpdatingSongDuration = setInterval(this.updateSongDuration, 200);
   }
 
-  setSongTime = (event: any) => this.audio.setCurrentTime(event.value);
+  setSongTime = (event: any): void => this.audio.setCurrentTime(event.value);
 
   private stopUpdatingSongTime: any = null; 
   private stopUpdatingSongDuration: any = null;
 
   private updateSongTime = (): void => {
-    const currTime: number = Math.round(this.audio.getCurrentTime());
-    this.songTime = currTime;
-    this.songTimeLabel = formatTime(currTime);
+    // Updates song time only when audio is playing
+    if (!this.getAudioState().isPlaying) {
+      clearInterval(this.stopUpdatingSongTime);
+    }
+    else {
+      const currTime: number = Math.round(this.audio.getCurrentTime());
+      this.songTime = currTime;
+      this.songTimeLabel = formatTime(currTime);  
+    }
   }
 
   private updateSongDuration = (): void => {
     const duration: number = this.audio.getDuration();    
 
+    // Stops polling for song duration data as soon as it finds it
     if (typeof duration === 'number' && duration > 0) {
-      clearInterval(this.stopUpdatingSongDuration);
+      clearInterval(this.stopUpdatingSongDuration);      
       
       const roundedDur: number = Math.round(duration);
       this.songDuration = roundedDur;
