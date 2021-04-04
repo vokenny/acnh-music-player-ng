@@ -5,6 +5,7 @@ import { SongObj } from '../../models/SongObj';
 import { AudioService } from '../../services/audio/audio.service';
 import { AudioState } from '../../models/AudioState';
 import { Subscription } from 'rxjs';
+import { formatTime } from './time-format';
 
 @Component({
   selector: 'app-player',
@@ -72,6 +73,7 @@ export class PlayerComponent implements OnInit {
   play = (): void => {
     this.audio.play();
     this.stopUpdatingSongTime = setInterval(this.updateSongTime, 1000);
+    this.stopUpdatingSongDuration = setInterval(this.updateSongDuration, 100);
     this.audio.audioState.isPlaying = true;
   }
 
@@ -81,22 +83,25 @@ export class PlayerComponent implements OnInit {
     this.audio.audioState.isPlaying = false;
   }
 
-  selectSong = (newSong: SongObj): void => this.audio.setSong(newSong);
+  selectSong = (newSong: SongObj): void => {
+    this.audio.setSong(newSong);
+    this.resetSongInfo();
+  }
 
   prevSong = (): void => {
     const prevSong: SongObj = this.getPrevSong();
 
     this.currentSong = prevSong;
-    this.songTime = 0;
     this.audio.setSong(prevSong);
+    this.resetSongInfo();
   }
 
   nextSong = (): void => {
     const nextSong: SongObj = this.getNextSong();
 
     this.currentSong = nextSong;
-    this.songTime = 0;
     this.audio.setSong(nextSong);
+    this.resetSongInfo();
   }
 
   private getPrevSong = (): SongObj => {
@@ -135,7 +140,7 @@ export class PlayerComponent implements OnInit {
   private sort = (arr: SongObj[]): SongObj[] => arr.sort((s1, s2) => s1.id - s2.id);
 
   /*
-   * Volume Slider control logic
+   * Volume slider control logic
    */
   volume: number | null = 100;
   showVolSlider = false;
@@ -150,15 +155,39 @@ export class PlayerComponent implements OnInit {
   /*
    * Song playback control logic
    */
-  playbackLabel = (value: number) => Math.round(value);
+  playbackLabel = (value: number): string => formatTime(Math.round(value));
 
   songTime: number = 0;
+  songTimeLabel: string = '0:00';
+  songDuration: number = 0;
+  songDurationLabel: string = '0:00';
 
-  getSongDuration = (): number => this.audio.getDuration() ? this.audio.getDuration() : 0;
+  private resetSongInfo = () => {
+    this.songTime = 0;
+    this.songTimeLabel = '0:00';
+    this.stopUpdatingSongDuration = setInterval(this.updateSongDuration, 500);
+  }
 
   setSongTime = (event: any) => this.audio.setCurrentTime(event.value);
 
-  stopUpdatingSongTime: any = null; 
+  private stopUpdatingSongTime: any = null; 
+  private stopUpdatingSongDuration: any = null;
 
-  updateSongTime = (): number => this.songTime = this.audio.getCurrentTime();
+  private updateSongTime = (): void => {
+    const currTime: number = Math.round(this.audio.getCurrentTime());
+    this.songTime = currTime;
+    this.songTimeLabel = formatTime(currTime);
+  }
+
+  private updateSongDuration = (): void => {
+    const duration: number = this.audio.getDuration();    
+
+    if (typeof duration === 'number' && duration > 0) {
+      clearInterval(this.stopUpdatingSongDuration);
+      
+      const roundedDur: number = Math.round(duration);
+      this.songDuration = roundedDur;
+      this.songDurationLabel = formatTime(roundedDur);
+    }
+  }
 }

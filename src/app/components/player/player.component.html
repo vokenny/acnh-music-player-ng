@@ -27,49 +27,57 @@
     />
   </div>
 
-  <mat-card-actions class="player-controls">
-    <mat-slider
-      id="playback-slider"
-      thumbLabel
-      [displayWith]="playbackLabel"
-      min="0"
-      max="{{ getSongDuration() }}"
-      (input)="setSongTime($event)"
-      [value]="songTime"
-    ></mat-slider>
-  </mat-card-actions>
+  <div class="controls-container">
+    <mat-card-actions class="playback-controls">
+      <mat-slider
+        id="playback-slider"
+        thumbLabel
+        [displayWith]="playbackLabel"
+        min="0"
+        [max]="songDuration"
+        (input)="setSongTime($event)"
+        [value]="songTime"
+      ></mat-slider>
 
-  <mat-card-actions class="player-controls">
-    <mat-icon
-      id="shuffle-icon"
-      (click)="toggleShuffle()"
-      [ngClass]="!getAudioState().shuffleMode ? 'faded' : ''"
-      >shuffle</mat-icon
-    >
+      <span id="playback-label"
+        >{{ songTimeLabel }} / {{ songDurationLabel }}</span
+      >
+    </mat-card-actions>
+  </div>
 
-    <mat-icon (click)="prevSong()">skip_previous</mat-icon>
+  <div class="controls-container">
+    <mat-card-actions class="song-controls">
+      <mat-icon
+        id="shuffle-icon"
+        (click)="toggleShuffle()"
+        [ngClass]="!getAudioState().shuffleMode ? 'faded' : ''"
+        >shuffle</mat-icon
+      >
 
-    <!-- Play/Pause button -->
-    <mat-icon *ngIf="!getAudioState().isPlaying" (click)="play()"
-      >play_circle_outline</mat-icon
-    >
-    <mat-icon *ngIf="getAudioState().isPlaying" (click)="pause()"
-      >pause_circle_outline</mat-icon
-    >
+      <mat-icon (click)="prevSong()">skip_previous</mat-icon>
 
-    <mat-icon (click)="nextSong()">skip_next</mat-icon>
+      <!-- Play/Pause button -->
+      <mat-icon *ngIf="!getAudioState().isPlaying" (click)="play()"
+        >play_circle_outline</mat-icon
+      >
+      <mat-icon *ngIf="getAudioState().isPlaying" (click)="pause()"
+        >pause_circle_outline</mat-icon
+      >
 
-    <mat-slider
-      id="volume-slider"
-      *ngIf="showVolSlider"
-      thumbLabel
-      vertical
-      min="0"
-      max="100"
-      (input)="setVolume($event)"
-      [value]="volume"
-    ></mat-slider>
+      <mat-icon (click)="nextSong()">skip_next</mat-icon>
 
-    <mat-icon class="volume" (click)="toggleVolSlider()">volume_up</mat-icon>
-  </mat-card-actions>
+      <mat-slider
+        id="volume-slider"
+        *ngIf="showVolSlider"
+        thumbLabel
+        vertical
+        min="0"
+        max="100"
+        (input)="setVolume($event)"
+        [value]="volume"
+      ></mat-slider>
+
+      <mat-icon class="volume" (click)="toggleVolSlider()">volume_up</mat-icon>
+    </mat-card-actions>
+  </div>
 </mat-card>

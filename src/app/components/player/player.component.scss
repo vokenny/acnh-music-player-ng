@@ -23,7 +23,6 @@
 .img-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 2vh;
 }
 
 #album-cover {
@@ -34,20 +33,35 @@
   padding: 0;
 }
 
-.mat-card-content,
-.mat-card-actions {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.controls-container {
+  display: grid;
+}
+
+// PLAYBACK SLIDER
+.playback-controls {
+  display: block;
+  margin: 0;
+  padding: 0;
 }
 
 #playback-slider {
+  float: left;
   width: 70%;
 }
 
-mat-card > .player-controls {
-  padding: 0;
+#playback-label {
+  position: absolute;
+  right: 16px;
+  bottom: 53px;
+}
+
+// SONG CONTROL ICONS
+.song-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin: 0;
+  padding: 0;
 }
 
 .mat-icon:hover {
