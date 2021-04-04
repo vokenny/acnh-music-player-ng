@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { SongsService } from '../../services/songs/songs.service';
-import { SongInterface } from '../../interfaces/SongInterface';
 import { SongObj } from '../../models/SongObj';
 import { AudioService } from '../../services/audio/audio.service';
 import { AudioState } from '../../models/AudioState';
@@ -20,7 +19,21 @@ export class PlayerComponent implements OnInit {
     this.getAllSongs();
   }
 
-  songObjs: SongObj[] = [];
+  private getAllSongs = (): Subscription => this.songsService.getAllSongs().subscribe({
+    error: (_) => console.log('Error fetching all song information', _),
+    next: (data: Object) => {
+      this.songsService.extractSongs(data);
+      this.setDefaultSong();
+      this.audio.setSong(this.currentSong);
+    }
+  });
+
+  private numOfAllSongs = () => this.songsService.songObjs.length;
+
+  /*
+   * Play/Pause/Next/Prev control logic
+   */
+  getAudioState = (): AudioState => this.audio.audioState;
 
   // Default load Welcome Horizons
   currentSong: SongObj = {
@@ -29,46 +42,14 @@ export class PlayerComponent implements OnInit {
     music_uri: 'https://acnhapi.com/v1/music/95',
     image_uri: 'https://acnhapi.com/v1/images/songs/95'
   };
-
-  private getAllSongs = (): Subscription => this.songsService.getAllSongs().subscribe({
-    error: (_) => console.log('Error fetching all song information', _),
-    next: (data: Object) => {
-      this.extractSongs(data);
-      this.setDefaultSong();
-      this.audio.setSong(this.currentSong);
-    }
-  });
   
-  private extractSongs = (songs: Object): void => {
-    this.songObjs = Object.entries(songs).map(song => {
-      const [_, songMetaData] = song;
+  songObjs = (): SongObj[] => this.songsService.songObjs;
 
-      // SongInterface lets us select keys on the object.
-      // Return type of SongObj instead of SongInterface means
-      // we only need to save the information we specify, and not the whole object
-      const songI: SongInterface = songMetaData as SongInterface;
-
-      return {
-        id: songI.id,
-        name: songI.name['name-EUen'],
-        music_uri: songI.music_uri,
-        image_uri: songI.image_uri
-      }
-    })
-  }
-
-  private setDefaultSong = (): void => {
-    const welcomeHorizonsSong: SongObj | undefined = this.songObjs.find(song => song.name === 'Welcome Horizons');
+  setDefaultSong = (): void => {
+    const welcomeHorizonsSong: SongObj | undefined = this.songsService.songObjs.find(song => song.name === 'Welcome Horizons');
 
     welcomeHorizonsSong ? this.currentSong = welcomeHorizonsSong : null;
   }
-
-  private numOfAllSongs = () => this.songObjs.length;
-
-  /*
-   * Play/Pause/Next/Prev control logic
-   */
-  getAudioState = (): AudioState => this.audio.audioState;
 
   private stopPollingEndState: any = null;
 
@@ -117,17 +98,17 @@ export class PlayerComponent implements OnInit {
   }
 
   private getPrevSong = (): SongObj => {
-    const idxOfCurrSong: number = this.songObjs.findIndex(song => song.name === this.currentSong.name);
+    const idxOfCurrSong: number = this.songsService.songObjs.findIndex(song => song.name === this.currentSong.name);
     const idxOfPrevSong: number = idxOfCurrSong === 0 ? this.numOfAllSongs() - 1 : idxOfCurrSong - 1;
     
-    return this.songObjs[idxOfPrevSong];
+    return this.songsService.songObjs[idxOfPrevSong];
   }
 
   private getNextSong = (): SongObj => {
-    const idxOfCurrSong: number = this.songObjs.indexOf(this.currentSong);
+    const idxOfCurrSong: number = this.songsService.songObjs.indexOf(this.currentSong);
     const idxOfNextSong: number = idxOfCurrSong === this.numOfAllSongs() - 1 ? 0 : idxOfCurrSong + 1;
 
-    return this.songObjs[idxOfNextSong];
+    return this.songsService.songObjs[idxOfNextSong];
   }
 
   /*
@@ -146,7 +127,7 @@ export class PlayerComponent implements OnInit {
     this.audio.toggleShuffle();
 
     // Randomise or reorder based on new shuffle mode
-    this.getAudioState().shuffleMode ? this.shuffle(this.songObjs) : this.sort(this.songObjs);
+    this.getAudioState().shuffleMode ? this.shuffle(this.songsService.songObjs) : this.sort(this.songsService.songObjs);
   }
 
   private sort = (arr: SongObj[]): SongObj[] => arr.sort((s1, s2) => s1.id - s2.id);

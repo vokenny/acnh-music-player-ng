@@ -9,7 +9,7 @@
     <mat-label>Playlist</mat-label>
     <mat-select disableOptionCentering [(value)]="currentSong">
       <mat-option
-        *ngFor="let song of songObjs"
+        *ngFor="let song of songObjs()"
         [value]="song"
         (click)="selectSong(currentSong)"
       >
