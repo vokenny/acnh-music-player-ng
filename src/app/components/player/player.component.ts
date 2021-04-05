@@ -55,7 +55,15 @@ export class PlayerComponent implements OnInit {
   private stopPollingEndState: any = null;
 
   private pollEndState = (): void  => {
-    this.getAudioState().ended ? this.nextSong() : null;    
+    const audioState = this.getAudioState();
+    if (audioState.ended) {
+      if (audioState.loopMode) {
+        this.loopSong();
+      }
+      else {
+        this.nextSong();
+      }
+    }
   }
 
   play = (): void => {
@@ -82,6 +90,12 @@ export class PlayerComponent implements OnInit {
     this.resetSongInfo();
   }
 
+  private loopSong = () => {
+    this.audio.resetEndState();
+    this.audio.play();
+    this.resetSongInfo();
+  }
+
   prevSong = (): void => {
     const prevSong: SongObj = this.getPrevSong();
 
@@ -91,17 +105,10 @@ export class PlayerComponent implements OnInit {
   }
 
   nextSong = (): void => {
-    if (this.getAudioState().loopMode) {
-      this.audio.resetEndState();
-      this.audio.play();
-    }
-    else {
-      const nextSong: SongObj = this.getNextSong();
+    const nextSong: SongObj = this.getNextSong();
 
-      this.currentSong = nextSong;
-      this.audio.setSong(nextSong);
-    }
-
+    this.currentSong = nextSong;
+    this.audio.setSong(nextSong);
     this.resetSongInfo();
   }
 
