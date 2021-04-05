@@ -25,6 +25,7 @@ export class PlayerComponent implements OnInit {
       this.songsService.extractSongs(data);
       this.setDefaultSong();
       this.audio.setSong(this.currentSong);
+      this.stopUpdatingSongTime = setInterval(this.updateSongTime, 200);
       this.stopUpdatingSongDuration = setInterval(this.updateSongDuration, 100);
     }
   });
@@ -68,7 +69,6 @@ export class PlayerComponent implements OnInit {
 
   play = (): void => {
     this.audio.play();
-    this.stopUpdatingSongTime = setInterval(this.updateSongTime, 200);
     this.stopUpdatingSongDuration = setInterval(this.updateSongDuration, 100);
     this.audio.audioState.isPlaying = true;
 
@@ -195,15 +195,9 @@ export class PlayerComponent implements OnInit {
   private stopUpdatingSongDuration: any = null;
 
   private updateSongTime = (): void => {
-    // Updates song time only when audio is playing
-    if (!this.getAudioState().isPlaying) {
-      clearInterval(this.stopUpdatingSongTime);
-    }
-    else {
-      const currTime: number = Math.round(this.audio.getCurrentTime());
-      this.songTime = currTime;
-      this.songTimeLabel = formatTime(currTime);  
-    }
+    const currTime: number = Math.round(this.audio.getCurrentTime());
+    this.songTime = currTime;
+    this.songTimeLabel = formatTime(currTime);  
   }
 
   private updateSongDuration = (): void => {
