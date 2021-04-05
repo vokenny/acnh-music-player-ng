@@ -22,15 +22,15 @@
 
 .img-container {
   min-width: 288px;
+  min-height: 288px;
   height: 25vw;
+  width: 25vw;
   display: flex;
   justify-content: center;
 }
 
 #album-cover {
   border-radius: 4px;
-  height: 25vw;
-  width: auto;
   margin: 0;
   padding: 0;
 }
