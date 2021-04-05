@@ -54,6 +54,13 @@
         >shuffle</mat-icon
       >
 
+      <mat-icon
+        id="loop-icon"
+        (click)="toggleLoop()"
+        [ngClass]="!getAudioState().loopMode ? 'faded' : ''"
+        >loop</mat-icon
+      >
+
       <mat-icon (click)="prevSong()">skip_previous</mat-icon>
 
       <!-- Play/Pause button -->

@@ -14,6 +14,7 @@ export class AudioService {
   audioState: AudioState = {
     isPlaying: false,
     shuffleMode: false,
+    loopMode: false,
     ended: false
   }
 
@@ -26,8 +27,10 @@ export class AudioService {
   setSong = (newSong: SongObj) => {
     this.audioObj.src = newSong.music_uri;
     this.audioState.isPlaying ? this.play() : null;
-    this.audioState.ended = false;
+    this.resetEndState();
   }
+
+  resetEndState = () => this.audioState.ended = false;
 
   play = (): void => {
     this.audioObj.play();
@@ -45,6 +48,8 @@ export class AudioService {
   }
 
   toggleShuffle = (): boolean => this.audioState.shuffleMode = !this.audioState.shuffleMode;
+
+  toggleLoop = (): boolean => this.audioState.loopMode = !this.audioState.loopMode;
 
   setVolume = (vol: any): void => {
     typeof vol === 'number' && vol >= 0 && vol <= 100 ? this.audioObj.volume = vol / 100 : null;

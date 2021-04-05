@@ -53,7 +53,7 @@ export class PlayerComponent implements OnInit {
 
   private stopPollingEndState: any = null;
 
-  private pollEndState = (): void  => {    
+  private pollEndState = (): void  => {
     this.getAudioState().ended ? this.nextSong() : null;    
   }
 
@@ -90,10 +90,17 @@ export class PlayerComponent implements OnInit {
   }
 
   nextSong = (): void => {
-    const nextSong: SongObj = this.getNextSong();
+    if (this.getAudioState().loopMode) {
+      this.audio.resetEndState();
+      this.audio.play();
+    }
+    else {
+      const nextSong: SongObj = this.getNextSong();
 
-    this.currentSong = nextSong;
-    this.audio.setSong(nextSong);
+      this.currentSong = nextSong;
+      this.audio.setSong(nextSong);
+    }
+
     this.resetSongInfo();
   }
 
@@ -123,6 +130,9 @@ export class PlayerComponent implements OnInit {
   }
 
   toggleShuffle = (): void => {
+    // Disable looping over one song if shuffling
+    this.getAudioState().loopMode ? this.toggleLoop() : null;
+
     // Change shuffle mode first
     this.audio.toggleShuffle();
 
@@ -131,6 +141,16 @@ export class PlayerComponent implements OnInit {
   }
 
   private sort = (arr: SongObj[]): SongObj[] => arr.sort((s1, s2) => s1.id - s2.id);
+
+  /*
+   * Loop single song logic
+   */
+  toggleLoop = (): void => {
+    // Disable shuffling if looping over one song
+    this.getAudioState().shuffleMode ? this.toggleShuffle() : null;
+
+    this.audio.toggleLoop();
+  }
 
   /*
    * Volume slider control logic
