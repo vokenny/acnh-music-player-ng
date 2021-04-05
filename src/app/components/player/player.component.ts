@@ -25,6 +25,7 @@ export class PlayerComponent implements OnInit {
       this.songsService.extractSongs(data);
       this.setDefaultSong();
       this.audio.setSong(this.currentSong);
+      this.stopUpdatingSongDuration = setInterval(this.updateSongDuration, 100);
     }
   });
 
