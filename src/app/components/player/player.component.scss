@@ -27,11 +27,12 @@
   width: 25vw;
   display: flex;
   justify-content: center;
+  overflow: hidden;
+  border-radius: 4px;
 }
 
 #album-cover {
-  border-radius: 4px;
-  width: auto;
+  object-fit: contain;
   margin: 0;
   padding: 0;
 }
