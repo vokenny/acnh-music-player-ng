@@ -1,5 +1,7 @@
 # acnh-music-player-ng
 
+<img src="./src/assets/images/acnh-music-player-ng.png" alt="Screenshot of Animal Crossing Music Player" width="75%" height="auto">
+
 https://vokenny.github.io/acnh-music-player-ng/
 
 Animal Crossing: New Horizons music player. Plays all 95 K.K. Slider songs, sourced from [ACNH API](https://acnhapi.com/).
