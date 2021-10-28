@@ -13,6 +13,7 @@ All images and music assets are the sole property of Nintendo.
 Implements additional features:
 
 - User interface with Angular Material components
+- Responsive web design
 - Continuous playback
 - Playback slider control
 - Shuffle mode
