@@ -1,4 +1,5 @@
 # acnh-music-player-ng
+N.B. the [ACNH API](https://github.com/alexislours/ACNHAPI) is no longer hosted, therefore the app is no longer working.
 
 <img src="./src/assets/images/acnh-music-player-ng.png" alt="Screenshot of Animal Crossing Music Player" width="75%" height="auto">
 
